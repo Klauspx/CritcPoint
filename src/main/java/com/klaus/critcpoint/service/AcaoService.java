@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class AcaoService {
-    public void buscarPreco(String codigoAcao){
+    public Double buscarPreco(String codigoAcao){
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://brapi.dev/api/quote/" + codigoAcao;
@@ -18,11 +18,12 @@ public class AcaoService {
             BrapiResponseDTO resposta = restTemplate.getForObject(url, BrapiResponseDTO.class);
 
             Double valorAtual = resposta.getResults().getFirst().getRegularMarketPrice();
-            System.out.println("Valor atual da ação:" + valorAtual);
+            return valorAtual;
 
         } catch (Exception e) {
             System.out.println("ERRO: Não foi possível buscar o preço de " + codigoAcao);
             System.out.println(e.getMessage());
+            return 0.0;
         }
     }
 }
