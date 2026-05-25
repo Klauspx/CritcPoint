@@ -2,6 +2,7 @@ package com.klaus.critcpoint.service;
 
 import com.klaus.critcpoint.dto.BrapiResponseDTO;
 import com.klaus.critcpoint.dto.CotacaoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

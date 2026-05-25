@@ -18,22 +18,8 @@ public class PontoCriticoController {
     @Autowired
     private PontoCriticoRepository pontoCriticoRepository;
 
-    @Autowired
-    private AcaoService acaoService;
-
     @PostMapping
     public PontoCritico salvarPontoCritico(@Valid @RequestBody PontoCritico pontoCritico){
-
-       Double precoAtual = acaoService.buscarPreco(pontoCritico.getCodigoAcao());
-
-        BigDecimal precoConvertido = BigDecimal.valueOf(precoAtual);
-
-        if (precoConvertido.compareTo(pontoCritico.getValorMaximo()) >= 0){
-            System.out.println("🚨 ALERTA: Limite atingido! Preparando para enviar mensagem ao usuário...");
-        } else if (precoConvertido.compareTo(pontoCritico.getValorMinimo()) <= 0) {
-            System.out.println("🚨 ALERTA: Limite atingido! Preparando para enviar mensagem ao usuário...");
-        }
-
         return pontoCriticoRepository.save(pontoCritico);
     }
 
