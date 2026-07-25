@@ -25,8 +25,10 @@ public class PontoCritico {
     @NotNull
     private BigDecimal valorMaximo;
 
-
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    private boolean alertaBaixaEnviado = false;
+    private boolean alertaAltaEnviado = false;
 }
