@@ -32,6 +32,11 @@ public class AlertaTask {
 
             Double precoAtual = acaoService.buscarPreco(alertaAtual.getCodigoAcao());
 
+            if (precoAtual == null || precoAtual <= 0.0){
+                System.out.println("A ação " + alertaAtual.getCodigoAcao() + " está em manutenção nesse momento");
+                continue;
+            }
+
             BigDecimal precoConvertido = BigDecimal.valueOf(precoAtual);
 
             String emailDono = alertaAtual.getUsuario().getEmail();
