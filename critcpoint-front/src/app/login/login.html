@@ -1,16 +1,15 @@
 <div class="login-wrapper" [class.dark-theme]="isDarkMode">
-  
   <div class="login-container">
-    
     <button class="btn-theme-toggle" (click)="toggleTheme()">
-      {{ isDarkMode ? '☀️ Mudar para Claro' : '🌙 Mudar para Escuro' }}
+      {{ isDarkMode ? 'Modo Claro' : 'Modo Escuro' }}
     </button>
 
     <div class="login-card">
       <h2>CritcPoint</h2>
-      <p>Monitoramento Inteligente da B3</p>
+      <p>Acesse seu painel de controle</p>
 
       <form class="login-form">
+        
         <div class="input-group">
           <label for="email">E-mail</label>
           <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Digite seu e-mail">
@@ -18,12 +17,16 @@
 
         <div class="input-group">
           <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Sua senha secreta">
+          <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Sua senha">
         </div>
 
         <button type="button" class="btn-login" (click)="fazerLogin()">Entrar</button>
+
+        <div class="link-rodape">
+          Ainda não tem conta? <a routerLink="/cadastro">Cadastre-se</a>
+        </div>
+
       </form>
     </div>
   </div>
-  
 </div>

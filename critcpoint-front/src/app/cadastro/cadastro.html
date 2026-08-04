@@ -1,0 +1,38 @@
+<div class="login-wrapper" [class.dark-theme]="isDarkMode">
+  <div class="login-container">
+    
+    <button class="btn-theme-toggle" (click)="toggleTheme()">
+      {{ isDarkMode ? '☀️ Mudar para Claro' : '🌙 Mudar para Escuro' }}
+    </button>
+
+    <div class="login-card">
+      <h2>Criar Conta</h2>
+      <p>Junte-se ao CritcPoint hoje mesmo</p>
+
+      <form class="login-form">
+        
+        <div class="input-group">
+          <label for="nome">Nome Completo</label>
+          <input type="text" id="nome" name="nome" [(ngModel)]="nome" placeholder="Digite seu nome">
+        </div>
+
+        <div class="input-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="input-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Crie uma senha forte">
+        </div>
+
+        <button type="button" class="btn-login" (click)="cadastrar()">Finalizar Cadastro</button>
+
+        <div class="link-rodape">
+          Já tem uma conta? <a routerLink="/login">Faça Login</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
