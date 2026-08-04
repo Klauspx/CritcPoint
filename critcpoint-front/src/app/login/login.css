@@ -1,0 +1,132 @@
+/* =========================================
+   VARIÁVEIS DE CORES (Baseado na sua foto) 
+   ========================================= */
+.login-wrapper {
+  /* TEMA CLARO (Padrão) */
+  --cor-fundo: #F4F6F8; /* Cinza gelo do fundo da imagem */
+  --cor-cartao: #FFFFFF; /* Branco dos cartões */
+  --cor-texto-titulo: #1E293B; /* Azul marinho/chumbo dos textos principais */
+  --cor-texto-base: #64748B; /* Cinza dos textos menores */
+  --cor-borda: #E2E8F0;
+  --cor-verde-esmeralda: #10B981; /* O verde dos números positivos e botões */
+  --cor-verde-hover: #059669;
+  --cor-fundo-input: #FFFFFF;
+  
+  background-color: var(--cor-fundo);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Transição suave ao trocar de tema */
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+/* TEMA ESCURO (Quando o botão é clicado) */
+.login-wrapper.dark-theme {
+  --cor-fundo: #0F172A; /* Usamos a cor daquela barra superior escura da sua foto */
+  --cor-cartao: #1E293B;
+  --cor-texto-titulo: #F8FAFC; /* Branco para dar leitura no escuro */
+  --cor-texto-base: #94A3B8;
+  --cor-borda: #334155;
+  --cor-verde-esmeralda: #10B981; /* O verde se mantém igual! */
+  --cor-verde-hover: #34D399;
+  --cor-fundo-input: #0F172A;
+}
+
+/* =========================================
+   ESTILOS DOS COMPONENTES
+   ========================================= */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.btn-theme-toggle {
+  background: var(--cor-cartao);
+  color: var(--cor-texto-titulo);
+  border: 1px solid var(--cor-borda);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-theme-toggle:hover {
+  transform: translateY(-2px);
+}
+
+.login-card {
+  background: var(--cor-cartao);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid var(--cor-borda);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.login-card h2 {
+  margin: 0;
+  color: var(--cor-texto-titulo);
+  font-size: 28px;
+  transition: color 0.3s ease;
+}
+
+.login-card p {
+  color: var(--cor-texto-base);
+  margin-bottom: 30px;
+  transition: color 0.3s ease;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--cor-texto-titulo);
+  font-size: 14px;
+}
+
+.input-group input {
+  padding: 12px;
+  background-color: var(--cor-fundo-input);
+  color: var(--cor-texto-titulo);
+  border: 2px solid var(--cor-borda);
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: var(--cor-verde-esmeralda);
+}
+
+.btn-login {
+  background-color: var(--cor-verde-esmeralda);
+  color: white;
+  border: none;
+  padding: 14px;
+  width: 100%;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+  background-color: var(--cor-verde-hover);
+}
