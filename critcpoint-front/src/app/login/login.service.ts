@@ -18,4 +18,12 @@ export class LoginService {
     // Ele faz um POST na URL do Java mandando o JSON (dadosDoUsuario)
     return this.http.post(this.urlBackend, dadosDoUsuario);
   }
+
+  // 4. Função de login: manda email e senha pro endpoint /login e recebe o usuário de volta
+  fazerLogin(credenciais: { email: string; senha: string }) {
+    return this.http.post<{ id: number; nome: string; email: string }>(
+      'http://localhost:8080/login',
+      credenciais
+    );
+  }
 }

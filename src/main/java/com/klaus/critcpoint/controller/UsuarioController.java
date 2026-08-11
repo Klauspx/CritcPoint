@@ -1,5 +1,7 @@
 package com.klaus.critcpoint.controller;
 
+import com.klaus.critcpoint.dto.LoginDTO;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.klaus.critcpoint.dto.AlertaDashboardDTO;
 import com.klaus.critcpoint.model.PontoCritico;
 import com.klaus.critcpoint.model.Usuario;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -27,8 +31,14 @@ public class UsuarioController {
     private AcaoService acaoService;
 
     @PostMapping("/usuarios")
-    public Usuario salvarUsuario (@Valid @RequestBody Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public ResponseEntity<?> salvarUsuario(@Valid @RequestBody Usuario usuario) {
+
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            return ResponseEntity.status(409).body("Já existe uma conta cadastrada com esse e-mail.");
+        }
+
+        Usuario salvo = usuarioRepository.save(usuario);
+        return ResponseEntity.status(201).body(salvo);
     }
 
     @GetMapping("/usuarios")
@@ -50,6 +60,21 @@ public class UsuarioController {
         return usuarioRepository.save(usuarioExistente);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+
+        Optional<Usuario> usuarioEncontrado = usuarioRepository.findByEmail(loginDTO.getEmail());
+
+        if (usuarioEncontrado.isEmpty() || !usuarioEncontrado.get().getSenha().equals(loginDTO.getSenha())) {
+            return ResponseEntity.status(401).body("E-mail ou senha inválidos!");
+        }
+
+        Usuario usuario = usuarioEncontrado.get();
+        usuario.setSenha(null);
+
+        return ResponseEntity.ok(usuario);
+    }
+
     @GetMapping("usuarios/{id}/dashboard")
     public ResponseEntity<List<AlertaDashboardDTO>> verDashboard(@PathVariable Long id){
 
@@ -63,6 +88,7 @@ public class UsuarioController {
 
 
             AlertaDashboardDTO dto = new AlertaDashboardDTO(
+                    alerta.getId(),
                     alerta.getCodigoAcao(),
                     alerta.getValorMinimo(),
                     alerta.getValorMaximo(),

@@ -4,8 +4,11 @@ import { Login } from './login/login';
 
 import { CadastroComponent } from './cadastro/cadastro'; 
 
+import { Dashboard } from './dashboard/dashboard';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
-  { path: 'cadastro', component: CadastroComponent }
+  { path: 'cadastro', component: CadastroComponent },
+  { path: 'dashboard', component: Dashboard }
 ];

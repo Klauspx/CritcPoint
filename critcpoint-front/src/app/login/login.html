@@ -20,7 +20,11 @@
           <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Sua senha">
         </div>
 
-        <button type="button" class="btn-login" (click)="fazerLogin()">Entrar</button>
+        <div class="mensagem-erro" *ngIf="erro">{{ erro }}</div>
+
+        <button type="button" class="btn-login" (click)="fazerLogin()" [disabled]="carregando">
+          {{ carregando ? 'Entrando...' : 'Entrar' }}
+        </button>
 
         <div class="link-rodape">
           Ainda não tem conta? <a routerLink="/cadastro">Cadastre-se</a>

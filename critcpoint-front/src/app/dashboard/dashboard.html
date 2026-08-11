@@ -1,0 +1,143 @@
+<div class="dashboard">
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="marca">
+      <span class="marca-icone">📈</span>
+      <span class="marca-nome">CRITCPOINT</span>
+    </div>
+
+    <nav class="menu">
+      <a class="ativo">Dashboard</a>
+      <a>Ações</a>
+      <a>Fundos</a>
+      <a>Notícias</a>
+      <a>Análise</a>
+      <a>Portfólio</a>
+    </nav>
+
+    <div class="usuario-area">
+      <span *ngIf="usuario">Olá, {{ usuario.nome }}</span>
+      <button class="btn-sair" (click)="sair()">Sair</button>
+    </div>
+  </header>
+
+  <main class="conteudo">
+
+    <div class="cabecalho-pagina">
+      <h1>Visão Geral do Mercado | Painel de Alertas</h1>
+      <p class="subtitulo">Acompanhe seus pontos críticos de compra e venda em tempo real</p>
+    </div>
+
+    <!-- Cards de mercado (mockados por enquanto) -->
+    <section class="cards-mercado">
+      <div class="card-mercado" *ngFor="let item of mercado">
+        <div class="card-mercado-topo">
+          <span class="card-mercado-nome">{{ item.nome }}</span>
+          <span class="seta" [class.seta-alta]="item.alta" [class.seta-baixa]="!item.alta">
+            {{ item.alta ? '↑' : '↓' }}
+          </span>
+        </div>
+        <div class="card-mercado-valor">{{ item.valor }}</div>
+        <div class="card-mercado-variacao" [class.texto-alta]="item.alta" [class.texto-baixa]="!item.alta">
+          {{ item.variacao }}
+        </div>
+      </div>
+    </section>
+    <p class="aviso-mock">* Dados de índices e moedas ilustrativos — em breve integrados a uma cotação real</p>
+
+    <!-- Tabela de alertas reais -->
+    <section class="painel-alertas">
+      <div class="painel-alertas-topo">
+        <h2>Meus Alertas de Ações</h2>
+        <button class="btn-novo-alerta" (click)="abrirFormulario()">+ Novo Alerta</button>
+      </div>
+
+      <div *ngIf="carregandoAlertas" class="estado-info">Carregando seus alertas...</div>
+      <div *ngIf="erroAlertas" class="estado-erro">{{ erroAlertas }}</div>
+
+      <div *ngIf="!carregandoAlertas && !erroAlertas && alertas.length === 0" class="estado-vazio">
+        Você ainda não tem alertas cadastrados. Clique em "Novo Alerta" pra criar o primeiro!
+      </div>
+
+      <table class="tabela-alertas" *ngIf="!carregandoAlertas && alertas.length > 0">
+        <thead>
+          <tr>
+            <th>Ativo</th>
+            <th>Preço Atual</th>
+            <th>Faixa (Mín. – Máx.)</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alerta of alertas">
+            <td class="celula-ativo">{{ alerta.codigoAcao }}</td>
+            <td>
+              <span *ngIf="statusAlerta(alerta) !== 'indisponivel'">
+                R$ {{ alerta.valorAtual | number:'1.2-2' }}
+              </span>
+              <span *ngIf="statusAlerta(alerta) === 'indisponivel'" class="texto-indisponivel">
+                indisponível
+              </span>
+            </td>
+            <td>R$ {{ alerta.valorMinimo | number:'1.2-2' }} – R$ {{ alerta.valorMaximo | number:'1.2-2' }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-alta': statusAlerta(alerta) === 'alta',
+                'badge-baixa': statusAlerta(alerta) === 'baixa',
+                'badge-normal': statusAlerta(alerta) === 'normal',
+                'badge-indisponivel': statusAlerta(alerta) === 'indisponivel'
+              }">
+                {{
+                  statusAlerta(alerta) === 'alta' ? 'Atingiu o máximo' :
+                  statusAlerta(alerta) === 'baixa' ? 'Atingiu o mínimo' :
+                  statusAlerta(alerta) === 'normal' ? 'Dentro da faixa' : 'Sem cotação'
+                }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-excluir" (click)="excluirAlerta(alerta)" [disabled]="excluindoId === alerta.id">
+                {{ excluindoId === alerta.id ? '...' : 'Excluir' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Modal de novo alerta -->
+  <div class="modal-fundo" *ngIf="mostrarFormulario">
+    <div class="modal-card">
+      <h2>Novo Alerta de Ação</h2>
+      <p class="subtitulo">Defina o código e a faixa de preço que você quer monitorar</p>
+
+      <div class="input-group">
+        <label for="codigoAcao">Código da Ação</label>
+        <input id="codigoAcao" type="text" [(ngModel)]="novoAlerta.codigoAcao" placeholder="Ex: PETR4">
+      </div>
+
+      <div class="input-group">
+        <label for="valorMinimo">Valor Mínimo (R$)</label>
+        <input id="valorMinimo" type="number" step="0.01" [(ngModel)]="novoAlerta.valorMinimo" placeholder="Ex: 30.00">
+      </div>
+
+      <div class="input-group">
+        <label for="valorMaximo">Valor Máximo (R$)</label>
+        <input id="valorMaximo" type="number" step="0.01" [(ngModel)]="novoAlerta.valorMaximo" placeholder="Ex: 40.00">
+      </div>
+
+      <div class="mensagem-erro" *ngIf="erroFormulario">{{ erroFormulario }}</div>
+
+      <div class="modal-botoes">
+        <button class="btn-cancelar" (click)="fecharFormulario()">Cancelar</button>
+        <button class="btn-confirmar" (click)="criarAlerta()" [disabled]="criandoAlerta">
+          {{ criandoAlerta ? 'Criando...' : 'Criar Alerta' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 // Importamos o nosso carteiro que já está configurado na pasta login
 import { LoginService } from '../login/login.service'; 
 
@@ -18,7 +18,7 @@ export class CadastroComponent {
   email = '';
   senha = '';
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
@@ -36,11 +36,14 @@ export class CadastroComponent {
     this.loginService.enviarParaOJava(pacoteDeDados).subscribe({
       next: (resposta) => {
         alert("Show! Usuário CADASTRADO com sucesso no banco de dados!");
-        // Depois vamos ensinar o Angular a voltar para o Login sozinho aqui!
+        this.router.navigate(['/login']);
       },
       error: (erro) => {
         console.error("Erro no cadastro:", erro);
-        alert("Erro ao conectar com o Java. Veja o F12!");
+        const mensagem = typeof erro.error === 'string'
+          ? erro.error
+          : "Erro ao conectar com o servidor. Veja o F12!";
+        alert(mensagem);
       }
     });
   }
