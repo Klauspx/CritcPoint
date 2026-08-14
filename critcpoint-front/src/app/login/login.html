@@ -1,36 +1,54 @@
 <div class="login-wrapper" [class.dark-theme]="isDarkMode">
-  <div class="login-container">
-    <button class="btn-theme-toggle" (click)="toggleTheme()">
-      {{ isDarkMode ? 'Modo Claro' : 'Modo Escuro' }}
-    </button>
+  <div class="login-card">
 
-    <div class="login-card">
-      <h2>CritcPoint</h2>
-      <p>Acesse seu painel de controle</p>
+    <!-- Lado esquerdo: ilustração. Troque a imagem em public/login-ilustracao.jpg -->
+    <div class="login-ilustracao">
+      <div class="ilustracao-topo">
+        <img src="/logo branca CrictPoint.png" alt="Logo do site" class="imagem-logo">
+        <span class="logo-nome">CRITCPOINT</span>
+      </div>
 
-      <form class="login-form">
-        
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Digite seu e-mail">
-        </div>
-
-        <div class="input-group">
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Sua senha">
-        </div>
-
-        <div class="mensagem-erro" *ngIf="erro">{{ erro }}</div>
-
-        <button type="button" class="btn-login" (click)="fazerLogin()" [disabled]="carregando">
-          {{ carregando ? 'Entrando...' : 'Entrar' }}
-        </button>
-
-        <div class="link-rodape">
-          Ainda não tem conta? <a routerLink="/cadastro">Cadastre-se</a>
-        </div>
-
-      </form>
+      <div class="ilustracao-rodape">
+        <p class="ilustracao-legenda">Seu radar de investimentos</p>
+        <h2>Alertas inteligentes<br>para decisões rápidas</h2>
+      </div>
     </div>
+
+    <!-- Lado direito: formulário -->
+    <div class="login-formulario">
+      <button class="btn-theme-toggle" (click)="toggleTheme()">
+        {{ isDarkMode ? 'Modo Claro' : 'Modo Escuro' }}
+      </button>
+
+      <div class="formulario-conteudo">
+        <h1>Bem-vindo de volta!</h1>
+        <p class="subtitulo">Entre para acompanhar seus alertas e gerenciar sua conta com segurança.</p>
+
+        <form class="login-form">
+
+          <div class="input-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Digite seu e-mail">
+          </div>
+
+          <div class="input-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" [(ngModel)]="senha" placeholder="Sua senha">
+          </div>
+
+          <div class="mensagem-erro" *ngIf="erro">{{ erro }}</div>
+
+          <button type="button" class="btn-login" (click)="fazerLogin()" [disabled]="carregando">
+            {{ carregando ? 'Entrando...' : 'Entrar no painel' }}
+          </button>
+
+          <div class="link-rodape">
+            Ainda não tem conta? <a routerLink="/cadastro">Cadastre-se</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
   </div>
 </div>

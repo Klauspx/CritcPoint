@@ -1,57 +1,141 @@
 /* =========================================
-   VARIÁVEIS DE CORES (Baseado na sua foto) 
+   VARIÁVEIS DE CORES (Baseado na sua foto)
    ========================================= */
 .login-wrapper {
   /* TEMA CLARO (Padrão) */
-  --cor-fundo: #F4F6F8; /* Cinza gelo do fundo da imagem */
-  --cor-cartao: #FFFFFF; /* Branco dos cartões */
-  --cor-texto-titulo: #1E293B; /* Azul marinho/chumbo dos textos principais */
-  --cor-texto-base: #64748B; /* Cinza dos textos menores */
+  --cor-fundo: #F4F6F8;
+  --cor-cartao: #FFFFFF;
+  --cor-texto-titulo: #1E293B;
+  --cor-texto-base: #64748B;
   --cor-borda: #E2E8F0;
-  --cor-verde-esmeralda: #10B981; /* O verde dos números positivos e botões */
+  --cor-verde-esmeralda: #10B981;
   --cor-verde-hover: #059669;
+  --cor-verde-escuro: #0F766E;
   --cor-fundo-input: #FFFFFF;
-  
+
   background-color: var(--cor-fundo);
   min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* Transição suave ao trocar de tema */
-  transition: background-color 0.3s ease, color 0.3s ease; 
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* TEMA ESCURO (Quando o botão é clicado) */
+/* TEMA ESCURO */
 .login-wrapper.dark-theme {
-  --cor-fundo: #0F172A; /* Usamos a cor daquela barra superior escura da sua foto */
+  --cor-fundo: #0F172A;
   --cor-cartao: #1E293B;
-  --cor-texto-titulo: #F8FAFC; /* Branco para dar leitura no escuro */
+  --cor-texto-titulo: #F8FAFC;
   --cor-texto-base: #94A3B8;
   --cor-borda: #334155;
-  --cor-verde-esmeralda: #10B981; /* O verde se mantém igual! */
+  --cor-verde-esmeralda: #10B981;
   --cor-verde-hover: #34D399;
+  --cor-verde-escuro: #0F766E;
   --cor-fundo-input: #0F172A;
 }
 
 /* =========================================
-   ESTILOS DOS COMPONENTES
+   CARD PRINCIPAL (dividido em 2 colunas)
    ========================================= */
-.login-container {
+.login-card {
+  background: var(--cor-cartao);
+  width: 100%;
+  max-width: 960px;
+  min-height: 560px;
+  border-radius: 24px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+/* ===== Lado esquerdo: ilustração ===== */
+.login-ilustracao {
+  flex: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 32px;
+  color: white;
+  margin: 12px;
+  border-radius: 18px;
+  overflow: hidden;
+
+  /* Troque pela sua imagem: coloque o arquivo em public/login-ilustracao.jpg */
+  background-image: url('/background-login.png'),
+    linear-gradient(160deg, var(--cor-verde-esmeralda) 0%, var(--cor-verde-escuro) 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.imagem-logo {
+  width: 35px; 
+  height: auto; 
+  vertical-align: middle; 
+  margin-right: 8px; 
+}
+
+.login-ilustracao::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.55) 100%);
+  z-index: 0;
+}
+
+.ilustracao-topo,
+.ilustracao-rodape {
+  position: relative;
+  z-index: 1;
+}
+
+.ilustracao-topo {
+  display: flex;
   align-items: center;
-  height: 100vh;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.logo-icone {
+  font-size: 20px;
+}
+
+.ilustracao-legenda {
+  font-size: 14px;
+  opacity: 0.85;
+  margin: 0 0 6px;
+}
+
+.ilustracao-rodape h2 {
+  font-size: 26px;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* ===== Lado direito: formulário ===== */
+.login-formulario {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 48px;
+  position: relative;
 }
 
 .btn-theme-toggle {
-  background: var(--cor-cartao);
+  align-self: flex-end;
+  background: var(--cor-fundo);
   color: var(--cor-texto-titulo);
   border: 1px solid var(--cor-borda);
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 20px;
   cursor: pointer;
-  margin-bottom: 20px;
   font-weight: 600;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
   transition: all 0.3s ease;
 }
 
@@ -59,28 +143,28 @@
   transform: translateY(-2px);
 }
 
-.login-card {
-  background: var(--cor-cartao);
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+.formulario-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 360px;
   width: 100%;
-  max-width: 400px;
-  text-align: center;
-  border: 1px solid var(--cor-borda);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin: 0 auto;
 }
 
-.login-card h2 {
-  margin: 0;
+.formulario-conteudo h1 {
+  margin: 0 0 6px;
   color: var(--cor-texto-titulo);
   font-size: 28px;
   transition: color 0.3s ease;
 }
 
-.login-card p {
+.subtitulo {
   color: var(--cor-texto-base);
-  margin-bottom: 30px;
+  margin: 0 0 28px;
+  font-size: 14px;
+  line-height: 1.5;
   transition: color 0.3s ease;
 }
 
@@ -92,18 +176,18 @@
 }
 
 .input-group label {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   font-weight: 600;
   color: var(--cor-texto-titulo);
   font-size: 14px;
 }
 
 .input-group input {
-  padding: 12px;
+  padding: 12px 14px;
   background-color: var(--cor-fundo-input);
   color: var(--cor-texto-titulo);
   border: 2px solid var(--cor-borda);
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 15px;
   outline: none;
   transition: all 0.3s ease;
@@ -130,11 +214,11 @@
   border: none;
   padding: 14px;
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 6px;
   transition: background-color 0.3s;
 }
 
@@ -148,9 +232,10 @@
 }
 
 .link-rodape {
-  margin-top: 25px;
+  margin-top: 22px;
   font-size: 14px;
   color: var(--cor-texto-base);
+  text-align: center;
   transition: color 0.3s ease;
 }
 
@@ -163,4 +248,20 @@
 .link-rodape a:hover {
   color: var(--cor-verde-hover);
   text-decoration: underline;
+}
+
+/* ===== Responsivo: empilha em telas estreitas ===== */
+@media (max-width: 800px) {
+  .login-card {
+    flex-direction: column;
+    max-width: 420px;
+  }
+
+  .login-ilustracao {
+    min-height: 200px;
+  }
+
+  .login-formulario {
+    padding: 32px 28px;
+  }
 }
