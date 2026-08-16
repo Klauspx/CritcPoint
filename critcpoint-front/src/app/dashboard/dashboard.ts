@@ -31,12 +31,12 @@ export class Dashboard implements OnInit {
   carregandoAlertas = false;
   erroAlertas = '';
 
-  // Cards de índices/moedas: sem endpoint próprio ainda, então ficam mockados por enquanto
+  // Cards de índices/moedas (iniciam vazios/carregando)
   mercado: CardMercado[] = [
-    { nome: 'IBOVESPA', valor: '118.540 pts', variacao: '+1.45%', alta: true },
-    { nome: 'DÓLAR BRL', valor: 'R$ 4,98', variacao: '-0.62%', alta: false },
-    { nome: 'S&P 500', valor: '4.310 pts', variacao: '+0.88%', alta: true },
-    { nome: 'NASDAQ', valor: '13.180 pts', variacao: '+1.15%', alta: true }
+    { nome: 'IBOVESPA', valor: 'Carregando...', variacao: '--', alta: true },
+    { nome: 'DÓLAR BRL', valor: 'Carregando...', variacao: '--', alta: true },
+    { nome: 'EURO BRL', valor: 'Carregando...', variacao: '--', alta: true },
+    { nome: 'BITCOIN BRL', valor: 'Carregando...', variacao: '--', alta: true }
   ];
 
   // Formulário de novo alerta
@@ -62,9 +62,79 @@ export class Dashboard implements OnInit {
     }
 
     this.usuario = JSON.parse(usuarioSalvo);
+    
     this.carregarAlertas();
+    
+    this.carregarDadosDoMercado();
+
+    setInterval(() => {
+      this.carregarDadosDoMercado();
+    }, 30000);
   }
 
+async carregarDadosDoMercado() {
+    // 1. Função auxiliar para formatar a porcentagem
+    const formataVariacao = (valor: string | number) => {
+      const numero = Number(valor);
+      return (numero > 0 ? '+' : '') + numero.toFixed(2).replace('.', ',') + '%';
+    };
+
+    // 2. Preparamos variáveis temporárias (caso dê erro, elas assumem o valor de "Indisponível")
+    let dadosIbov = { valor: 'Indisponível', variacao: '--', alta: false };
+    let dadosDolar = { valor: 'Indisponível', variacao: '--', alta: false };
+    let dadosEuro = { valor: 'Indisponível', variacao: '--', alta: false };
+    let dadosBitcoin = { valor: 'Indisponível', variacao: '--', alta: false };
+
+    // 3. Tenta buscar o IBOVESPA isoladamente
+    try {
+      const respostaBolsa = await fetch('https://api.hgbrasil.com/finance?format=json-cors');
+      const jsonBolsa = await respostaBolsa.json();
+      const ibovespa = jsonBolsa.results.stocks.IBOVESPA;
+      
+      dadosIbov = {
+        valor: Number(ibovespa.points).toLocaleString('pt-BR') + ' pts',
+        variacao: formataVariacao(ibovespa.variation),
+        alta: Number(ibovespa.variation) >= 0
+      };
+    } catch (erro) {
+      console.error('Erro ao carregar IBOVESPA:', erro);
+    }
+
+    // 4. Tenta buscar as Moedas isoladamente
+    try {
+      const respostaMoedas = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL');
+      const jsonMoedas = await respostaMoedas.json();
+
+      dadosDolar = {
+        valor: Number(jsonMoedas.USDBRL.ask).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        variacao: formataVariacao(jsonMoedas.USDBRL.pctChange),
+        alta: Number(jsonMoedas.USDBRL.pctChange) >= 0
+      };
+
+      dadosEuro = {
+        valor: Number(jsonMoedas.EURBRL.ask).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        variacao: formataVariacao(jsonMoedas.EURBRL.pctChange),
+        alta: Number(jsonMoedas.EURBRL.pctChange) >= 0
+      };
+
+      dadosBitcoin = {
+        valor: Number(jsonMoedas.BTCBRL.ask).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        variacao: formataVariacao(jsonMoedas.BTCBRL.pctChange),
+        alta: Number(jsonMoedas.BTCBRL.pctChange) >= 0
+      };
+    } catch (erro) {
+      console.error('Erro ao carregar Moedas:', erro);
+    }
+
+    // 5. Atualiza a tela (O Angular detecta a mudança aqui)
+    this.mercado = [
+      { nome: 'IBOVESPA', valor: dadosIbov.valor, variacao: dadosIbov.variacao, alta: dadosIbov.alta },
+      { nome: 'DÓLAR BRL', valor: dadosDolar.valor, variacao: dadosDolar.variacao, alta: dadosDolar.alta },
+      { nome: 'EURO BRL', valor: dadosEuro.valor, variacao: dadosEuro.variacao, alta: dadosEuro.alta },
+      { nome: 'BITCOIN BRL', valor: dadosBitcoin.valor, variacao: dadosBitcoin.variacao, alta: dadosBitcoin.alta }
+    ];
+  }
+  
   carregarAlertas() {
     if (!this.usuario) return;
 
