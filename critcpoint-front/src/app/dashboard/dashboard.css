@@ -14,6 +14,43 @@
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--cor-texto-titulo);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* ===== Tema Escuro (Dark Mode overrides) ===== */
+.dashboard.tema-escuro {
+  --cor-fundo: #0F172A;          /* Fundo escuro azulado */
+  --cor-cartao: #1E293B;         /* Cor dos cards */
+  --cor-texto-titulo: #F8FAFC;   /* Texto branco/cinza claro */
+  --cor-texto-base: #94A3B8;     /* Textos secundários */
+  --cor-borda: #334155;          /* Bordas escuras */
+  
+  /* Ajuste das cores de fundo das badges para não ficarem brilhantes demais no escuro */
+  --cor-verde-fundo: rgba(16, 185, 129, 0.15); 
+  --cor-vermelho-fundo: rgba(239, 68, 68, 0.15);
+}
+
+.btn-tema {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50px;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-tema:hover {
+  transform: scale(1.1);
+}
+
+/* 👇 Adicione o tamanho fixo para as suas imagens PNG aqui */
+.icone-tema {
+  width: 24px;
+  height: 24px;
+  object-fit: contain; /* Garante que a imagem não fique esticada ou distorcida */
 }
 
 /* ===== Barra superior ===== */
@@ -363,3 +400,48 @@
     display: none;
   }
 }
+
+  /* =========================================
+   TOAST NOTIFICATION (MENSAGENS)
+   ========================================= */
+.toast-notificacao {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background-color: #333;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 9999;
+  
+  /* Animação para entrar e sair da tela */
+  transform: translateX(120%); 
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Efeito "elástico" */
+}
+
+.toast-notificacao.mostrar {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Cores dependendo do tipo */
+.toast-sucesso {
+  background-color: #10b981; /* Verde moderno */
+  color: #ffffff;
+}
+
+.toast-erro {
+  background-color: #ef4444; /* Vermelho moderno */
+  color: #ffffff;
+}
+
+.toast-icone {
+  font-size: 1.2rem;
+}
+

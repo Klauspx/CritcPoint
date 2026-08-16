@@ -47,6 +47,14 @@ export class Dashboard implements OnInit {
 
   // Controle de exclusão
   excluindoId: number | null = null;
+  mostrarModalExclusao = false;
+  alertaParaExcluir: AlertaDashboard | null = null;
+  // Controle do Toast (Notificação)
+  toastMensagem: string = '';
+  toastTipo: 'sucesso' | 'erro' = 'sucesso';
+  toastVisivel: boolean = false;
+  toastTimeout: any;
+  temaEscuro: boolean = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -62,6 +70,11 @@ export class Dashboard implements OnInit {
     }
 
     this.usuario = JSON.parse(usuarioSalvo);
+
+    const temaSalvo = localStorage.getItem('temaDashboard');
+    if (temaSalvo === 'escuro') {
+      this.temaEscuro = true;
+    }
     
     this.carregarAlertas();
     
@@ -201,6 +214,7 @@ async carregarDadosDoMercado() {
         this.criandoAlerta = false;
         this.mostrarFormulario = false;
         this.carregarAlertas();
+        this.mostrarToast('Alerta criado com sucesso!', 'sucesso');
       },
       error: (erro) => {
         this.criandoAlerta = false;
@@ -212,21 +226,39 @@ async carregarDadosDoMercado() {
     });
   }
 
+  // 1. Abre o modal de confirmação
   excluirAlerta(alerta: AlertaDashboard) {
-    const confirmar = confirm(`Excluir o alerta de ${alerta.codigoAcao}?`);
-    if (!confirmar) return;
+    this.alertaParaExcluir = alerta;
+    this.mostrarModalExclusao = true;
+  }
 
-    this.excluindoId = alerta.id;
+  // 2. Fecha o modal se o usuário desistir
+  cancelarExclusao() {
+    this.mostrarModalExclusao = false;
+    this.alertaParaExcluir = null;
+  }
 
-    this.dashboardService.deletarAlerta(alerta.id).subscribe({
+  // 3. Executa a exclusão de fato quando ele clica em "Sim"
+  confirmarExclusao() {
+    if (!this.alertaParaExcluir) return;
+
+    this.excluindoId = this.alertaParaExcluir.id;
+    const id = this.alertaParaExcluir.id;
+
+    this.dashboardService.deletarAlerta(id).subscribe({
       next: () => {
-        this.alertas = this.alertas.filter(a => a.id !== alerta.id);
+        this.alertas = this.alertas.filter(a => a.id !== id);
         this.excluindoId = null;
+        this.mostrarModalExclusao = false;
+        this.alertaParaExcluir = null;
+        this.mostrarToast('Alerta excluído!', 'sucesso');
       },
       error: (erro) => {
         console.error('Erro ao excluir alerta:', erro);
-        alert('Não foi possível excluir o alerta.');
         this.excluindoId = null;
+        this.mostrarModalExclusao = false;
+        this.alertaParaExcluir = null;
+        this.mostrarToast('Não foi possível excluir o alerta.', 'erro');
       }
     });
   }
@@ -234,5 +266,28 @@ async carregarDadosDoMercado() {
   sair() {
     localStorage.removeItem('usuarioLogado');
     this.router.navigate(['/login']);
+  }
+  
+  // Alterna entre tema claro e escuro
+  toggleTema() {
+    this.temaEscuro = !this.temaEscuro;
+    localStorage.setItem('temaDashboard', this.temaEscuro ? 'escuro' : 'claro');
+  }
+
+  // Função para exibir a notificação bonita
+  mostrarToast(mensagem: string, tipo: 'sucesso' | 'erro') {
+    this.toastMensagem = mensagem;
+    this.toastTipo = tipo;
+    this.toastVisivel = true;
+
+    // Limpa o timer anterior se o usuário clicar em várias coisas rápido
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+
+    // Faz a mensagem sumir sozinha depois de 3.5 segundos
+    this.toastTimeout = setTimeout(() => {
+      this.toastVisivel = false;
+    }, 3500);
   }
 }
