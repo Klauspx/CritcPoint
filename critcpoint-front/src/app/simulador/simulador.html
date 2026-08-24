@@ -1,0 +1,103 @@
+<div class="simulador">
+  <header class="topbar">
+    <div class="marca">
+      <span class="marca-icone">📈</span>
+      <span class="marca-nome">CRITCPOINT</span>
+    </div>
+
+    <nav class="menu">
+      <a (click)="voltarParaDashboard()">Dashboard</a>
+      <a class="ativo">Simulador</a>
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    <div class="cabecalho-pagina">
+      <h1>Simulador de Investimentos</h1>
+      <p class="subtitulo">Projete quanto você teria com base na taxa atual do ativo escolhido</p>
+    </div>
+
+    <div class="card-formulario">
+
+      <div class="input-group">
+        <label>Tipo de ativo</label>
+        <div class="opcoes-toggle">
+          <button type="button"
+                  [class.ativo]="tipoAtivo === 'ACAO'"
+                  (click)="tipoAtivo = 'ACAO'">Ação</button>
+          <button type="button"
+                  [class.ativo]="tipoAtivo === 'TESOURO'"
+                  (click)="tipoAtivo = 'TESOURO'">Tesouro Direto</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="codigo">
+          {{ tipoAtivo === 'ACAO' ? 'Código da ação (ex: PETR4)' : 'Código do título (ex: tesouro-selic-01032031)' }}
+        </label>
+        <input id="codigo" type="text" [(ngModel)]="codigo"
+               [placeholder]="tipoAtivo === 'ACAO' ? 'PETR4' : 'tesouro-selic-01032031'">
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de aporte</label>
+        <div class="opcoes-toggle">
+          <button type="button"
+                  [class.ativo]="tipoAporte === 'UNICO'"
+                  (click)="tipoAporte = 'UNICO'">Depósito único</button>
+          <button type="button"
+                  [class.ativo]="tipoAporte === 'MENSAL'"
+                  (click)="tipoAporte = 'MENSAL'">Depósitos mensais</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="valorAporte">
+          {{ tipoAporte === 'UNICO' ? 'Valor do depósito (R$)' : 'Valor de cada depósito mensal (R$)' }}
+        </label>
+        <input id="valorAporte" type="number" step="0.01" [(ngModel)]="valorAporte" placeholder="Ex: 500">
+      </div>
+
+      <div class="input-group">
+        <label for="meses">Por quantos meses?</label>
+        <input id="meses" type="number" [(ngModel)]="quantidadeMeses" placeholder="Ex: 12">
+      </div>
+
+      <div class="mensagem-erro" *ngIf="erro">{{ erro }}</div>
+
+      <button class="btn-simular" (click)="simular()" [disabled]="carregando">
+        {{ carregando ? 'Calculando...' : 'Simular' }}
+      </button>
+
+    </div>
+
+    <div class="card-resultado" *ngIf="resultado">
+      <h2>Resultado da simulação</h2>
+
+      <div class="linha-resultado">
+        <span>Taxa anual utilizada</span>
+        <strong>{{ resultado.taxaAnualUtilizada | number:'1.2-2' }}% a.a.</strong>
+      </div>
+      <div class="linha-resultado">
+        <span>Total investido</span>
+        <strong>R$ {{ resultado.valorInvestido | number:'1.2-2' }}</strong>
+      </div>
+      <div class="linha-resultado destaque">
+        <span>Valor final projetado</span>
+        <strong>R$ {{ resultado.valorFinal | number:'1.2-2' }}</strong>
+      </div>
+      <div class="linha-resultado">
+        <span>Total de rendimentos</span>
+        <strong class="texto-verde">+ R$ {{ resultado.totalRendimentos | number:'1.2-2' }}</strong>
+      </div>
+
+      <p class="aviso-mock" *ngIf="tipoAtivo === 'ACAO'">
+        * Simulação baseada no dividend yield atual, com reinvestimento — não projeta valorização do preço da ação.
+      </p>
+      <p class="aviso-mock" *ngIf="tipoAtivo === 'TESOURO'">
+        * Taxa indicativa atual do título. Rentabilidade real pode variar até o vencimento.
+      </p>
+    </div>
+
+  </main>
+</div>

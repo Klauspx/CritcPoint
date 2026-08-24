@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DashboardService, AlertaDashboard } from './dashboard.service';
 
 interface UsuarioLogado {
@@ -9,7 +9,6 @@ interface UsuarioLogado {
   nome: string;
   email: string;
 }
-
 interface CardMercado {
   nome: string;
   valor: string;
@@ -19,7 +18,7 @@ interface CardMercado {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

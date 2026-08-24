@@ -1,0 +1,178 @@
+.simulador {
+  --cor-fundo: #F4F6F8;
+  --cor-cartao: #FFFFFF;
+  --cor-texto-titulo: #1E293B;
+  --cor-texto-base: #64748B;
+  --cor-borda: #E2E8F0;
+  --cor-verde-esmeralda: #10B981;
+  --cor-verde-hover: #059669;
+  --cor-verde-fundo: #D1FAE5;
+
+  background-color: var(--cor-fundo);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--cor-texto-titulo);
+}
+
+.topbar {
+  background: var(--cor-cartao);
+  border-bottom: 1px solid var(--cor-borda);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.menu {
+  display: flex;
+  gap: 24px;
+}
+
+.menu a {
+  color: var(--cor-texto-base);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.menu a.ativo {
+  color: var(--cor-verde-esmeralda);
+}
+
+.conteudo {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+.cabecalho-pagina h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.subtitulo {
+  color: var(--cor-texto-base);
+  margin: 0 0 24px;
+  font-size: 14px;
+}
+
+.card-formulario, .card-resultado {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.input-group input {
+  padding: 12px;
+  border: 2px solid var(--cor-borda);
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--cor-verde-esmeralda);
+}
+
+.opcoes-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.opcoes-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid var(--cor-borda);
+  background: var(--cor-cartao);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--cor-texto-base);
+}
+
+.opcoes-toggle button.ativo {
+  border-color: var(--cor-verde-esmeralda);
+  color: var(--cor-verde-esmeralda);
+  background: var(--cor-verde-fundo);
+}
+
+.mensagem-erro {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.btn-simular {
+  width: 100%;
+  background: var(--cor-verde-esmeralda);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-simular:hover {
+  background: var(--cor-verde-hover);
+}
+
+.btn-simular:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.card-resultado h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.linha-resultado {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: 14px;
+}
+
+.linha-resultado.destaque {
+  font-size: 16px;
+}
+
+.texto-verde {
+  color: var(--cor-verde-esmeralda);
+}
+
+.aviso-mock {
+  font-size: 12px;
+  color: var(--cor-texto-base);
+  margin-top: 16px;
+  font-style: italic;
+}
