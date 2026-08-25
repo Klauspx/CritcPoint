@@ -12,7 +12,7 @@ import { SimuladorService, SimulacaoResponse } from './simulador.service';
 })
 export class Simulador {
 
-  tipoAtivo: 'ACAO' | 'TESOURO' = 'ACAO';
+  tipoAtivo: 'ACAO' | 'FII' | 'TESOURO' = 'ACAO';
   codigo = '';
   valorAporte: number | null = null;
   tipoAporte: 'UNICO' | 'MENSAL' = 'UNICO';
@@ -39,7 +39,7 @@ export class Simulador {
 
     this.carregando = true;
 
-    this.simuladorService.simular({
+      this.simuladorService.simular({
       tipoAtivo: this.tipoAtivo,
       codigo: this.codigo.trim(),
       valorAporte: this.valorAporte,

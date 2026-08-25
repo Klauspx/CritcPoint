@@ -14,12 +14,17 @@ public class SimulacaoService {
     @Autowired
     private TesouroService tesouroService;
 
+    @Autowired
+    private FiiService fiiService;
+
     public SimulacaoResponseDTO simular(SimulacaoRequestDTO request) {
 
         Double taxaAnual;
 
         if ("ACAO".equalsIgnoreCase(request.getTipoAtivo())) {
             taxaAnual = acaoService.buscarDividendYield(request.getCodigo());
+        } else if ("FII".equalsIgnoreCase(request.getTipoAtivo())) {
+            taxaAnual = fiiService.buscarDividendYield(request.getCodigo());
         } else {
             taxaAnual = tesouroService.buscarTaxaAnual(request.getCodigo());
         }

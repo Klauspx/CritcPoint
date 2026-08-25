@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export interface SimulacaoRequest {
-  tipoAtivo: 'ACAO' | 'TESOURO';
+  tipoAtivo: 'ACAO' | 'FII' | 'TESOURO';
   codigo: string;
   valorAporte: number;
   tipoAporte: 'UNICO' | 'MENSAL';

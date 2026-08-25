@@ -21,22 +21,27 @@
 
       <div class="input-group">
         <label>Tipo de ativo</label>
-        <div class="opcoes-toggle">
-          <button type="button"
-                  [class.ativo]="tipoAtivo === 'ACAO'"
-                  (click)="tipoAtivo = 'ACAO'">Ação</button>
-          <button type="button"
-                  [class.ativo]="tipoAtivo === 'TESOURO'"
-                  (click)="tipoAtivo = 'TESOURO'">Tesouro Direto</button>
+          <div class="opcoes-toggle">
+            <button type="button"
+                    [class.ativo]="tipoAtivo === 'ACAO'"
+                    (click)="tipoAtivo = 'ACAO'">Ação</button>
+            <button type="button"
+                    [class.ativo]="tipoAtivo === 'FII'"
+                    (click)="tipoAtivo = 'FII'">FII</button>
+            <button type="button"
+                    [class.ativo]="tipoAtivo === 'TESOURO'"
+                    (click)="tipoAtivo = 'TESOURO'">Tesouro Direto</button>
         </div>
       </div>
 
       <div class="input-group">
         <label for="codigo">
-          {{ tipoAtivo === 'ACAO' ? 'Código da ação (ex: PETR4)' : 'Código do título (ex: tesouro-selic-01032031)' }}
+          {{ tipoAtivo === 'ACAO' ? 'Código da ação (ex: PETR4)' :
+            tipoAtivo === 'FII' ? 'Código do FII (ex: MXRF11)' :
+            'Código do título (ex: tesouro-selic-01032031)' }}
         </label>
         <input id="codigo" type="text" [(ngModel)]="codigo"
-               [placeholder]="tipoAtivo === 'ACAO' ? 'PETR4' : 'tesouro-selic-01032031'">
+              [placeholder]="tipoAtivo === 'ACAO' ? 'PETR4' : tipoAtivo === 'FII' ? 'MXRF11' : 'tesouro-selic-01032031'">
       </div>
 
       <div class="input-group">
@@ -75,24 +80,16 @@
       <h2>Resultado da simulação</h2>
 
       <div class="linha-resultado">
-        <span>Taxa anual utilizada</span>
-        <strong>{{ resultado.taxaAnualUtilizada | number:'1.2-2' }}% a.a.</strong>
-      </div>
-      <div class="linha-resultado">
-        <span>Total investido</span>
-        <strong>R$ {{ resultado.valorInvestido | number:'1.2-2' }}</strong>
-      </div>
-      <div class="linha-resultado destaque">
-        <span>Valor final projetado</span>
-        <strong>R$ {{ resultado.valorFinal | number:'1.2-2' }}</strong>
-      </div>
-      <div class="linha-resultado">
-        <span>Total de rendimentos</span>
+        <span>{{ tipoAtivo === 'TESOURO' ? 'Total de juros' : 'Dividendos recebidos e reinvestidos' }}</span>
         <strong class="texto-verde">+ R$ {{ resultado.totalRendimentos | number:'1.2-2' }}</strong>
       </div>
 
-      <p class="aviso-mock" *ngIf="tipoAtivo === 'ACAO'">
-        * Simulação baseada no dividend yield atual, com reinvestimento — não projeta valorização do preço da ação.
+      <p class="aviso-mock" *ngIf="(tipoAtivo === 'ACAO' || tipoAtivo === 'FII') && resultado.taxaAnualUtilizada === 0">
+        * Não encontramos dividend yield pra esse código. Isso pode ser porque o ativo não paga dividendos
+        no momento, ou porque o código está incorreto.
+      </p>
+      <p class="aviso-mock" *ngIf="(tipoAtivo === 'ACAO' || tipoAtivo === 'FII') && resultado.taxaAnualUtilizada > 0">
+        * Simulação com reinvestimento dos dividendos — não projeta valorização da cota/ação.
       </p>
       <p class="aviso-mock" *ngIf="tipoAtivo === 'TESOURO'">
         * Taxa indicativa atual do título. Rentabilidade real pode variar até o vencimento.
