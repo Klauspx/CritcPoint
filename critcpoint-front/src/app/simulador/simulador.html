@@ -9,6 +9,14 @@
       <a (click)="voltarParaDashboard()">Dashboard</a>
       <a class="ativo">Simulador</a>
     </nav>
+
+    <!-- Nova área do usuário e tema -->
+    <div class="usuario-area">
+      <span class="nome-usuario">Olá, {{ nomeUsuario }}</span>
+      <button class="btn-tema" (click)="toggleTema()" title="Mudar tema">
+        <img [src]="temaEscuro ? 'sol.png' : 'lua.png'" class="icone-tema" alt="Alternar tema">
+      </button>
+    </div>
   </header>
 
   <main class="conteudo">

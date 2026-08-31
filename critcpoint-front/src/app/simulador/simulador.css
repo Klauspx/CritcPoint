@@ -176,3 +176,51 @@
   margin-top: 16px;
   font-style: italic;
 }
+
+/* Dark Mode para a página de Simulação */
+:host-context(body.dark-mode) .simulador,
+body.dark-mode .simulador {
+  --cor-fundo: #0F172A;
+  --cor-cartao: #1E293B;
+  --cor-texto-titulo: #F8FAFC;
+  --cor-texto-base: #94A3B8;
+  --cor-borda: #334155;
+}
+
+/* Ajustes de alinhamento do cabeçalho */
+.marca, .usuario-area {
+  flex: 1; /* Mantém o menu centralizado dividindo o espaço igualmente */
+}
+
+.usuario-area {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--cor-texto-titulo);
+}
+
+/* Estilização do botão de ícone PNG */
+.btn-tema {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50px;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-tema:hover {
+  transform: scale(1.1);
+}
+
+.icone-tema {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
