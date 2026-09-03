@@ -313,6 +313,28 @@
   max-width: 400px;
 }
 
+.modal-card .opcoes-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-card .opcoes-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid var(--cor-borda);
+  background: var(--cor-cartao);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--cor-texto-base);
+}
+
+.modal-card .opcoes-toggle button.ativo {
+  border-color: var(--cor-verde-esmeralda);
+  color: var(--cor-verde-esmeralda);
+  background: var(--cor-verde-fundo);
+}
+
 .modal-card h2 {
   margin: 0 0 4px;
   font-size: 20px;

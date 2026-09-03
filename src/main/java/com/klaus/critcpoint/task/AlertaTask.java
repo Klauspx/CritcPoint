@@ -4,12 +4,10 @@ import com.klaus.critcpoint.model.PontoCritico;
 import com.klaus.critcpoint.repository.PontoCriticoRepository;
 import com.klaus.critcpoint.service.AcaoService;
 import com.klaus.critcpoint.service.EmailService;
+import com.klaus.critcpoint.service.FiiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +19,8 @@ public class AlertaTask {
     @Autowired
     private AcaoService acaoService;
     @Autowired
+    private FiiService fiiService;
+    @Autowired
     private EmailService emailService;
 
     @Scheduled(cron = "0 0 10-17/2 * * MON-FRI")
@@ -30,7 +30,9 @@ public class AlertaTask {
 
         for (PontoCritico alertaAtual : alertas) {
 
-            Double precoAtual = acaoService.buscarPreco(alertaAtual.getCodigoAcao());
+            Double precoAtual = "FII".equalsIgnoreCase(alertaAtual.getTipoAtivo())
+                    ? fiiService.buscarPreco(alertaAtual.getCodigoAcao())
+                    : acaoService.buscarPreco(alertaAtual.getCodigoAcao());
 
             if (precoAtual == null || precoAtual <= 0.0){
                 System.out.println("A ação " + alertaAtual.getCodigoAcao() + " está em manutenção nesse momento");

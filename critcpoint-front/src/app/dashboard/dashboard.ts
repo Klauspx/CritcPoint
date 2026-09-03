@@ -40,7 +40,12 @@ export class Dashboard implements OnInit {
 
   // Formulário de novo alerta
   mostrarFormulario = false;
-  novoAlerta = { codigoAcao: '', valorMinimo: null as number | null, valorMaximo: null as number | null };
+    novoAlerta = {
+    codigoAcao: '',
+    valorMinimo: null as number | null,
+    valorMaximo: null as number | null,
+    tipoAtivo: 'ACAO' as 'ACAO' | 'FII'
+    };
   criandoAlerta = false;
   erroFormulario = '';
 
@@ -98,15 +103,21 @@ async carregarDadosDoMercado() {
     let dadosBitcoin = { valor: 'Indisponível', variacao: '--', alta: false };
 
     // 3. Tenta buscar o IBOVESPA isoladamente
+    // 3. Tenta buscar o IBOVESPA isoladamente (Agora usando a BRAPI)
     try {
-      const respostaBolsa = await fetch('https://api.hgbrasil.com/finance?format=json-cors');
+      // Coloque a sua chave da Brapi aqui dentro das aspas:
+      const tokenBrapi = 'pNcqxMewrmjRHRiXFGNDCH'; 
+      const respostaBolsa = await fetch(`https://brapi.dev/api/quote/^BVSP?token=${tokenBrapi}`);
+      
+      if (!respostaBolsa.ok) throw new Error('Falha na API da Brapi');
+      
       const jsonBolsa = await respostaBolsa.json();
-      const ibovespa = jsonBolsa.results.stocks.IBOVESPA;
+      const ibovespa = jsonBolsa.results[0]; // A Brapi devolve os dados dentro de um array "results"
       
       dadosIbov = {
-        valor: Number(ibovespa.points).toLocaleString('pt-BR') + ' pts',
-        variacao: formataVariacao(ibovespa.variation),
-        alta: Number(ibovespa.variation) >= 0
+        valor: Number(ibovespa.regularMarketPrice).toLocaleString('pt-BR') + ' pts',
+        variacao: formataVariacao(ibovespa.regularMarketChangePercent),
+        alta: Number(ibovespa.regularMarketChangePercent) >= 0
       };
     } catch (erro) {
       console.error('Erro ao carregar IBOVESPA:', erro);
@@ -174,10 +185,10 @@ async carregarDadosDoMercado() {
     return 'normal';
   }
 
-  abrirFormulario() {
+      abrirFormulario() {
     this.mostrarFormulario = true;
     this.erroFormulario = '';
-    this.novoAlerta = { codigoAcao: '', valorMinimo: null, valorMaximo: null };
+    this.novoAlerta = { codigoAcao: '', valorMinimo: null, valorMaximo: null, tipoAtivo: 'ACAO' };
   }
 
   fecharFormulario() {
@@ -189,7 +200,7 @@ async carregarDadosDoMercado() {
 
     if (!this.usuario) return;
 
-    const { codigoAcao, valorMinimo, valorMaximo } = this.novoAlerta;
+      const { codigoAcao, valorMinimo, valorMaximo, tipoAtivo } = this.novoAlerta;
 
     if (!codigoAcao || valorMinimo === null || valorMaximo === null) {
       this.erroFormulario = 'Preencha o código da ação e os valores mínimo e máximo.';
@@ -203,12 +214,13 @@ async carregarDadosDoMercado() {
 
     this.criandoAlerta = true;
 
-    this.dashboardService.criarAlerta({
-      codigoAcao: codigoAcao.toUpperCase().trim(),
-      valorMinimo,
-      valorMaximo,
-      usuario: { id: this.usuario.id }
-    }).subscribe({
+      this.dashboardService.criarAlerta({
+        codigoAcao: codigoAcao.toUpperCase().trim(),
+        valorMinimo,
+        valorMaximo,
+        tipoAtivo,
+        usuario: { id: this.usuario.id }
+      }).subscribe({
       next: () => {
         this.criandoAlerta = false;
         this.mostrarFormulario = false;

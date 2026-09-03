@@ -1,6 +1,7 @@
 package com.klaus.critcpoint.controller;
 
 import com.klaus.critcpoint.dto.LoginDTO;
+import com.klaus.critcpoint.service.FiiService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import com.klaus.critcpoint.dto.AlertaDashboardDTO;
 import com.klaus.critcpoint.model.PontoCritico;
@@ -29,6 +30,9 @@ public class UsuarioController {
 
     @Autowired
     private AcaoService acaoService;
+
+    @Autowired
+    private FiiService fiiService;
 
     @PostMapping("/usuarios")
     public ResponseEntity<?> salvarUsuario(@Valid @RequestBody Usuario usuario) {
@@ -84,8 +88,9 @@ public class UsuarioController {
 
         for (PontoCritico alerta : alertasDoUsuario) {
 
-            Double precoAtual = acaoService.buscarPreco(alerta.getCodigoAcao());
-
+            Double precoAtual = "FII".equalsIgnoreCase(alerta.getTipoAtivo())
+                    ? fiiService.buscarPreco(alerta.getCodigoAcao())
+                    : acaoService.buscarPreco(alerta.getCodigoAcao());
 
             AlertaDashboardDTO dto = new AlertaDashboardDTO(
                     alerta.getId(),

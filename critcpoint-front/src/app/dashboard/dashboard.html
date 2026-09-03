@@ -115,9 +115,22 @@
       <h2>Novo Alerta de Ação</h2>
       <p class="subtitulo">Defina o código e a faixa de preço que você quer monitorar</p>
 
-      <div class="input-group">
-        <label for="codigoAcao">Código da Ação</label>
-        <input id="codigoAcao" type="text" [(ngModel)]="novoAlerta.codigoAcao" placeholder="Ex: PETR4">
+        <div class="input-group">
+          <label>Tipo de ativo</label>
+          <div class="opcoes-toggle">
+            <button type="button"
+                    [class.ativo]="novoAlerta.tipoAtivo === 'ACAO'"
+                    (click)="novoAlerta.tipoAtivo = 'ACAO'">Ação</button>
+            <button type="button"
+                    [class.ativo]="novoAlerta.tipoAtivo === 'FII'"
+                    (click)="novoAlerta.tipoAtivo = 'FII'">FII</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="codigoAcao">{{ novoAlerta.tipoAtivo === 'ACAO' ? 'Código da Ação' : 'Código do FII' }}</label>
+          <input id="codigoAcao" type="text" [(ngModel)]="novoAlerta.codigoAcao"
+                [placeholder]="novoAlerta.tipoAtivo === 'ACAO' ? 'Ex: PETR4' : 'Ex: MXRF11'">
       </div>
 
       <div class="input-group">

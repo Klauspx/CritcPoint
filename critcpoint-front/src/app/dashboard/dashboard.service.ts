@@ -7,12 +7,14 @@ export interface AlertaDashboard {
   valorMinimo: number;
   valorMaximo: number;
   valorAtual: number;
+  tipoAtivo?: string;
 }
 
 export interface NovoAlertaPayload {
   codigoAcao: string;
   valorMinimo: number;
   valorMaximo: number;
+  tipoAtivo: 'ACAO' | 'FII';
   usuario: { id: number };
 }
 

@@ -31,4 +31,6 @@ public class PontoCritico {
 
     private boolean alertaBaixaEnviado = false;
     private boolean alertaAltaEnviado = false;
+
+    private String tipoAtivo = "ACAO";
 }
