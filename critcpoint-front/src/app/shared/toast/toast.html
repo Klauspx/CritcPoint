@@ -1,0 +1,9 @@
+<div class="toast-container">
+  <div class="toast" *ngFor="let toast of toastService.toasts()" [ngClass]="'toast-' + toast.type">
+    <span class="toast-icone">
+      {{ toast.type === 'success' ? '✓' : toast.type === 'error' ? '✕' : 'ℹ' }}
+    </span>
+    <span class="toast-mensagem">{{ toast.message }}</span>
+    <button class="toast-fechar" (click)="fechar(toast.id)">✕</button>
+  </div>
+</div>

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DashboardService, AlertaDashboard } from './dashboard.service';
+import { ToastService } from '../shared/toast.service';
+import { ConfirmService } from '../shared/confirm.service';
 
 interface UsuarioLogado {
   id: number;
@@ -62,7 +64,9 @@ export class Dashboard implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService,
+    private confirmService: ConfirmService
   ) {}
 
   ngOnInit() {
@@ -238,9 +242,24 @@ async carregarDadosDoMercado() {
   }
 
   // 1. Abre o modal de confirmação
-  excluirAlerta(alerta: AlertaDashboard) {
-    this.alertaParaExcluir = alerta;
-    this.mostrarModalExclusao = true;
+  async excluirAlerta(alerta: AlertaDashboard) {
+    const confirmado = await this.confirmService.pedir(`Excluir o alerta de ${alerta.codigoAcao}?`);
+    if (!confirmado) return;
+
+    this.excluindoId = alerta.id;
+
+    this.dashboardService.deletarAlerta(alerta.id).subscribe({
+      next: () => {
+        this.alertas = this.alertas.filter(a => a.id !== alerta.id);
+        this.excluindoId = null;
+        this.toastService.success('Alerta excluído.');
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir alerta:', erro);
+        this.toastService.error('Não foi possível excluir o alerta.');
+        this.excluindoId = null;
+      }
+    });
   }
 
   // 2. Fecha o modal se o usuário desistir

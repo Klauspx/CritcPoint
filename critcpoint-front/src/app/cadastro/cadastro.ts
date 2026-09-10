@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
-// Importamos o nosso carteiro que já está configurado na pasta login
+import { ToastService } from '../shared/toast.service';
 import { LoginService } from '../login/login.service'; 
 
 @Component({
@@ -18,7 +18,11 @@ export class CadastroComponent {
   email = '';
   senha = '';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private toastService: ToastService
+  ) {}
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
@@ -33,17 +37,17 @@ export class CadastroComponent {
 
     console.log("Enviando pacote de cadastro...", pacoteDeDados);
 
-    this.loginService.enviarParaOJava(pacoteDeDados).subscribe({
+        this.loginService.enviarParaOJava(pacoteDeDados).subscribe({
       next: (resposta) => {
-        alert("Show! Usuário CADASTRADO com sucesso no banco de dados!");
+        this.toastService.success("Conta criada com sucesso! Faça login pra continuar.");
         this.router.navigate(['/login']);
       },
       error: (erro) => {
         console.error("Erro no cadastro:", erro);
         const mensagem = typeof erro.error === 'string'
           ? erro.error
-          : "Erro ao conectar com o servidor. Veja o F12!";
-        alert(mensagem);
+          : "Erro ao conectar com o servidor.";
+        this.toastService.error(mensagem);
       }
     });
   }

@@ -1,0 +1,9 @@
+<div class="confirm-fundo" *ngIf="confirmService.aberto()">
+  <div class="confirm-card">
+    <p>{{ confirmService.mensagem() }}</p>
+    <div class="confirm-botoes">
+      <button class="btn-cancelar" (click)="confirmService.cancelar()">Cancelar</button>
+      <button class="btn-confirmar" (click)="confirmService.confirmar()">Confirmar</button>
+    </div>
+  </div>
+</div>
